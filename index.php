@@ -32,15 +32,38 @@ $app->get('/test/:name', function ($name) use ($app) {
 
 });
 
+// response
 $app->post('/books', function () use ($app) {
     //Create book
     $body = $app->request->getBody();
 
     echo $body;
+
+    $app->response->setStatus(400);
+    $app->setCookie('foo', 'bar', '2 days');
+    $app->deleteCookie('foo');
+
+    // Overwrite response body
+    $app->response->setBody('Foo');
+
+    // Append response body
+    $app->response->write('Bar');
+
+
+    // response json string with application/json header
+    $arr = array(
+        "name" => "jerry",
+        "age"  => 25
+    );
+    $app->response->json($arr);
 });
 
 $app->delete('/books/:id', function ($id) {
     //Delete book identified by $id
+});
+
+$app->get('/archive(/:year(/:month(/:day)))', function ($year = 2010, $month = 12, $day = 05) {
+    echo sprintf('%s-%s-%s', $year, $month, $day);
 });
 
 
@@ -50,6 +73,7 @@ $authenticateForRole = function ( $role = 'member' ) {
         // ...
     };
 };
+
 $app->get('/admin', $authenticateForRole('admin'), function () {
     //Display admin control panel
 });
