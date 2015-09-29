@@ -26,5 +26,16 @@ $app->get('/test/:name', function ($name) use ($app) {
 
 });
 
+$app->post('/books', function () use ($app) {
+    //Create book
+    $body = $app->request->getBody();
+
+    echo $body;
+});
+
+$app->delete('/books/:id', function ($id) {
+    //Delete book identified by $id
+});
+
 
 $app->run();
